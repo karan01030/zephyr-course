@@ -55,4 +55,9 @@ if LED_SUBSYSTEM
 	endmenu
 endif
 
+config LED_HEARTBEAT_PERIOD_MS
+	int "LED Heart beats (ms)"
+	default 500
+	range 100 2000
+
 source "Kconfig.zephyr"
