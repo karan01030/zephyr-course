@@ -1,0 +1,6 @@
+board:
+  name: my_board
+  full_name: My Board from stratch
+  vendor: keval
+  socs:
+    - name: stm32f407xx
