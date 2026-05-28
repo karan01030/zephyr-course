@@ -3,4 +3,9 @@
         compatible = "our,driver";
         status = "okay";
     };
+
+    our_driver1: our_driver1 {
+        compatible = "our,driver";
+        status = "okay";
+    };
 };

@@ -55,4 +55,7 @@ static int init(const struct device* dev) {
 
 // To make the instance of our driver
 // 0 -> zeroth instance
-DEVICE_DT_INST_DEFINE(0, init, NULL, NULL, NULL, POST_KERNEL, 80, &api_our_driver);
+#define DEV_INST(inst) DEVICE_DT_INST_DEFINE(inst, init, NULL, NULL, NULL, POST_KERNEL, 80, &api_our_driver);
+
+// To make multiple instance to be added from app.overlay
+DT_INST_FOREACH_STATUS_OKAY(DEV_INST);
