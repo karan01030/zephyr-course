@@ -1,6 +1,11 @@
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/logging/log.h>
+#include "our_driver.h"
+
+typedef struct our_driver_param {
+	uint32_t param;
+} our_driver_t;
 
 #define DT_DRV_COMPAT our_driver
 
@@ -30,6 +35,17 @@ static int our_driver_sample_fetch(const struct device *dev,
     return 0;
 }
 
+void our_driver_custom_param(const struct device *dev, uint32_t param) {
+	struct our_driver_param *data = (struct our_driver_param*) dev->data;
+
+	if (data != NULL) {
+		data->param = param;
+		LOG_INF("Custom value updated to: %u", param);
+	} else {
+		LOG_INF("Custom not value updated");
+	}
+}
+
 // Link the driver with function pointer of structure declared
 static DEVICE_API(sensor, api_our_driver) = {
     .channel_get = our_driver_channel_get,
@@ -55,7 +71,9 @@ static int init(const struct device* dev) {
 
 // To make the instance of our driver
 // 0 -> zeroth instance
-#define DEV_INST(inst) DEVICE_DT_INST_DEFINE(inst, init, NULL, NULL, NULL, POST_KERNEL, 80, &api_our_driver);
+#define DEV_INST(inst) \
+	static our_driver_t our_driver_param_##inst; \
+	DEVICE_DT_INST_DEFINE(inst, init, NULL, &our_driver_param_##inst, NULL, POST_KERNEL, 80, &api_our_driver);
 
 // To make multiple instance to be added from app.overlay
 DT_INST_FOREACH_STATUS_OKAY(DEV_INST);
