@@ -10,7 +10,11 @@ static int cmd_sensor_fetch(const struct shell *sh, size_t argc, char **argv)
     ARG_UNUSED(argv);
     sensor_sample_fetch(led_dev);
     shell_info(sh, "Sensor sample Fetch executed");
+<<<<<<< HEAD
     struct our_driver_t *data = led_dev->data;
+=======
+    our_driver_t *data = led_dev->data;
+>>>>>>> 46a9047 (Custom extension API for lesson 7)
     shell_fprintf(sh, SHELL_INFO, "Blink counter = %d\n", data->param);
     return 0;
 }
@@ -51,7 +55,7 @@ static int cmd_sensor_set_value(const struct shell *sh, size_t argc, char **argv
     uint8_t value_set = (uint8_t)value_received;
     shell_fprintf(sh, SHELL_INFO, "Value Received: %d\n", value_set);
 
-    our_driver_sample_fetch(led_dev, value_set);
+    our_driver_custom_param(led_dev, value_set);
     return 0;
 }
 

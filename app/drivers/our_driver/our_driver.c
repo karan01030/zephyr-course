@@ -28,7 +28,11 @@ static int our_driver_sample_fetch(const struct device *dev,
     LOG_INF("Hello From our_driver_sample_fetch %d", chan);
     gpio_pin_configure_dt(&led, GPIO_OUTPUT_INACTIVE);
 
+<<<<<<< HEAD
     struct our_driver_t *data = dev->data;
+=======
+    our_driver_t *data = dev->data;
+>>>>>>> 46a9047 (Custom extension API for lesson 7)
     LOG_INF("Blink Counter = %d", data->param);
 
     data->param += 1;
@@ -73,8 +77,8 @@ static int init(const struct device* dev) {
 // To make the instance of our driver
 // 0 -> zeroth instance
 #define DEV_INST(inst)                                      \
-	static struct our_driver_t our_driver_param_##inst{ \
-		.param = 0;                                 \
+	static our_driver_t our_driver_param_##inst = {     \
+		.param = 0,                                 \
 	};                                                  \
 	DEVICE_DT_INST_DEFINE(inst, init, NULL, &our_driver_param_##inst, NULL, POST_KERNEL, 80, &api_our_driver); \
 
