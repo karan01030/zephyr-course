@@ -3,10 +3,6 @@
 #include <zephyr/logging/log.h>
 #include "our_driver.h"
 
-typedef struct our_driver_param {
-	uint32_t param;
-} our_driver_t;
-
 #define DT_DRV_COMPAT our_driver
 
 LOG_MODULE_REGISTER(our_driver, LOG_LEVEL_INF);
@@ -31,6 +27,11 @@ static int our_driver_sample_fetch(const struct device *dev,
 
     LOG_INF("Hello From our_driver_sample_fetch %d", chan);
     gpio_pin_configure_dt(&led, GPIO_OUTPUT_INACTIVE);
+
+    struct our_driver_t *data = dev->data;
+    LOG_INF("Blink Counter = %d", data->param);
+
+    data->param += 1;
 
     return 0;
 }
@@ -71,9 +72,11 @@ static int init(const struct device* dev) {
 
 // To make the instance of our driver
 // 0 -> zeroth instance
-#define DEV_INST(inst) \
-	static our_driver_t our_driver_param_##inst; \
-	DEVICE_DT_INST_DEFINE(inst, init, NULL, &our_driver_param_##inst, NULL, POST_KERNEL, 80, &api_our_driver);
+#define DEV_INST(inst)                                      \
+	static struct our_driver_t our_driver_param_##inst{ \
+		.param = 0;                                 \
+	};                                                  \
+	DEVICE_DT_INST_DEFINE(inst, init, NULL, &our_driver_param_##inst, NULL, POST_KERNEL, 80, &api_our_driver); \
 
 // To make multiple instance to be added from app.overlay
 DT_INST_FOREACH_STATUS_OKAY(DEV_INST);
